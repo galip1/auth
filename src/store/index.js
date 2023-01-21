@@ -1,39 +1,30 @@
-import { useReducer } from "react";
-import { useContext } from "react";
-import { createContext } from "react";
-import { counterReducer } from "./counter/counter-reducer";
+import { useReducer, useContext, createContext } from "react";
+import { authInitialState } from "./auth/auth-initial-state";
+import { authReducer } from "./auth/auth-reducer";
 import { counterInitialState } from "./counter/counter-initial-state";
-import { messageReducer } from "./hello-world/hello-reducer";
-import { messageInitialState } from "./hello-world/hello-initial-state";
+import { counterReducer } from "./counter/counter-reducer";
 
-//bos bır merkezı state olusturuldu
+// Boş bir merkezi state oluşturuldu
 const StoreContext = createContext();
 
-//comp lerde merkezı state e erişimi kolaylaştırmak için kendı hook umuzu yazdık
+// Componentlerde merkezi state e erişimi kolaylaştırmak için kendi hook umuzu yazdık
 export const useStore = () => useContext(StoreContext);
 
 export const StoreProvider = ({ children }) => {
-  ///burada value e koyacagımız degerlerı yazmamız gerekır
-  //usereducer hook una reducer ve ınıtılastate parametre olarak verılır.
-  //usereducer fonk ıse gerıye setter ve getter ları doner
-  //ilki     getter ıkıncısı setter
+  // useReducer hook una reducer ve initialstate parametre olarak verilir...
+  // useReducer fonksiyonu ise geriye setter ve getter ları döner.
+  //       getter          setter
+  //1  counter
   const [counterState, dispatchCounter] = useReducer(
     counterReducer,
     counterInitialState
   );
-  const [messageState, dispatchMessage] = useReducer(
-    messageReducer,
-    messageInitialState
-  );
+  //2 - auth
+  const [authState, dispatchAuth] = useReducer(authReducer, authInitialState);
 
   return (
     <StoreContext.Provider
-      value={{
-        counterState,
-        dispatchCounter,
-        messageState,
-        dispatchMessage,
-      }}
+      value={{ counterState, dispatchCounter, authState, dispatchAuth }}
     >
       {children}
     </StoreContext.Provider>
